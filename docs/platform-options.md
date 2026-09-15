@@ -27,6 +27,31 @@ This matters regardless of which platform gets picked:
   those would leave InMotion unused (though still paid for, unless the
   hosting plan itself gets cancelled or repurposed).
 
+## A newer dimension: tooling for AI-assisted maintenance
+
+If ongoing edits are going to lean on an AI coding assistant (as this
+plan itself has), some hosts now have first-party tooling for that and
+some don't. Noted here as one more input for the committee, not a factor
+that should override the others above.
+
+- **Railway, Vercel, Netlify, Cloudflare (Pages/Workers), Render** —
+  each now offers an MCP server and/or CLI/API that lets an AI agent
+  manage deployments, logs, env vars, and domains directly, on top of the
+  usual git-push-to-deploy workflow. Railway's integration explicitly
+  lists Claude Code among supported clients. None of these are where
+  51 Walden is hosted today, so picking one would mean a new host
+  alongside (or instead of) the InMotion account, not just a new
+  platform layer on top of it.
+- **InMotion (current host)** — no vendor-provided AI/agent tooling, but
+  more capable than it might seem: cPanel has a built-in Git Version
+  Control feature, and shared hosting supports SSH
+  (`ssh://user@host:2222/...`), so a git-push deploy workflow using SSH
+  keys (not a login password) is possible on the account already paid
+  for. It would be self-wired rather than turnkey.
+- **Squarespace, Webflow, Wix** — closed platforms with no git/API surface
+  for this kind of tooling; changes go through their own editors
+  regardless of who or what is making them.
+
 ## Options on the table
 
 **WordPress, kept as-is or re-themed**
@@ -72,6 +97,8 @@ clearly labeled files with a short edit guide next to them.
   text file versus using a visual editor?
 - Does design distinctiveness matter enough to trade away a built-in
   dashboard, or is turnkey ease worth more than a fully custom look?
+- How much does it matter that ongoing edits could lean on an AI coding
+  assistant, versus edits happening entirely by hand?
 
 ## Status
 
