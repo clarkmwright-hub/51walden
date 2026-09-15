@@ -315,7 +315,7 @@
     <p class="dek">A plan for rebuilding 51walden.org on a platform its volunteers can run without a developer on call &mdash; and for giving the site the same care the board has spent on the building: the Access 51 accessibility campaign, the new HVAC, four resident companies putting on 60&plus; performances a year for about 8,000 patrons. None of that is on the homepage today.</p>
     <div class="cover-meta">
       <div class="meta-item"><span class="k">Current platform</span><span class="v">WordPress (Divi-style builder)</span></div>
-      <div class="meta-item"><span class="k">Proposed platform</span><span class="v">Squarespace</span></div>
+      <div class="meta-item"><span class="k">Proposed platform</span><span class="v">Open &mdash; for committee review (see options)</span></div>
       <div class="meta-item"><span class="k">Scope</span><span class="v">Full IA, design, and content rebuild</span></div>
       <div class="meta-item"><span class="k">Est. timeline</span><span class="v">10&ndash;14 weeks, part-time</span></div>
     </div>
@@ -394,22 +394,23 @@
 <section id="platform">
   <div class="wrap-wide">
     <div class="section-head">
-      <span class="eyebrow">03 &middot; platform</span>
-      <h2>Move off WordPress &mdash; onto Squarespace</h2>
-      <p class="lede">The explicit ask was an easier platform, run by volunteers, with no dedicated developer on staff. That rules out anything that still needs plugin updates, security patching, or a build step.</p>
+      <span class="eyebrow">03 &middot; platform options</span>
+      <h2>Off WordPress &mdash; onto what, is still open</h2>
+      <p class="lede">This is the start of the process, and the platform call belongs to the board/committee, not this document. What follows is a tradeoff table, not a pick &mdash; including a coded option that wasn't on the table originally, now that InMotion hosting is confirmed as a standard LAMP stack (Linux, Apache, MySQL, PHP) with full cPanel/FTP access already in hand. No option below is ruled out.</p>
     </div>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Platform</th><th>Volunteer upkeep</th><th>Built-in giving &amp; events</th><th>Design control</th><th>Rough cost</th></tr></thead>
         <tbody>
           <tr><td>WordPress <span style="color:var(--text-faint); font-weight:400;">(current)</span></td><td class="no">Plugin &amp; core updates, security patching, a builder plugin (Divi-class) to maintain</td><td class="mid">Via added plugins (more surface area)</td><td class="yes">Highest, at a cost</td><td>Hosting + plugin licenses, ~$200&ndash;500/yr</td></tr>
-          <tr class="pick-row"><td>Squarespace <span class="pick-badge">Recommended</span></td><td class="yes">Zero patching; one login; a non-technical volunteer can edit text and photos safely</td><td class="yes">Native Stripe donations, native events/calendar, native forms</td><td class="mid">Good within templates; less freeform than Webflow</td><td>~$25&ndash;49/mo, annual billing</td></tr>
+          <tr><td>Squarespace</td><td class="yes">Zero patching; one login; a non-technical volunteer can edit text and photos safely</td><td class="yes">Native Stripe donations, native events/calendar, native forms</td><td class="mid">Good within templates; less freeform than custom code</td><td>~$25&ndash;49/mo, new subscription on top of existing hosting</td></tr>
           <tr><td>Webflow</td><td class="mid">No patching, but the visual builder has a real learning curve for non-designers</td><td class="mid">Forms &amp; CMS native; giving needs a Stripe/Donorbox embed</td><td class="yes">Highest of the no-code options</td><td>~$23&ndash;40/mo, plus more setup time</td></tr>
           <tr><td>Wix</td><td class="yes">Similarly low-maintenance</td><td class="mid">Donations via app; weaker content modeling for four repeating "resident group" pages</td><td class="mid">Good, less clean CMS structure</td><td>~$27&ndash;49/mo</td></tr>
+          <tr><td>Static HTML on InMotion</td><td class="mid">No WYSIWYG &mdash; edits are file changes; manageable if isolated into a few clearly labeled files for what actually changes</td><td class="mid">Stripe/Donorbox embed for giving; a PHP mail() script (InMotion's LAMP stack) for the rental inquiry form</td><td class="yes">Total &mdash; hand-coded, no template constraints</td><td>$0 new &mdash; runs on hosting already paid for</td></tr>
         </tbody>
       </table>
     </div>
-    <p style="margin-top:18px; font-size:0.94rem; color:var(--text-soft); max-width:66ch;">Squarespace wins on the criterion that matters most for an all-volunteer board: nobody has to think about hosting, updates, or plugin conflicts again. If a design-capable volunteer or a hired freelancer stays involved long-term, Webflow is the fallback &mdash; more visual range, at the cost of a steeper handoff.</p>
+    <p style="margin-top:18px; font-size:0.94rem; color:var(--text-soft); max-width:66ch;">Each option trades against a different priority: Squarespace and Wix trade cost for a dashboard any volunteer can use; Webflow trades ease-of-use for design range; static HTML trades a dashboard for zero new spend and total design control, on hosting already paid for. How much content actually changes per season, who's available to maintain it, and how much the board wants to spend on a new subscription versus using what's already in place are all committee-level calls &mdash; this table exists to make those tradeoffs visible, not to make the call.</p>
   </div>
 </section>
 
