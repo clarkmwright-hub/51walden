@@ -52,6 +52,40 @@ that should override the others above.
   for this kind of tooling; changes go through their own editors
   regardless of who or what is making them.
 
+## A different kind of AI feature: built into the builder itself
+
+Separate from AI-assisted *maintenance* (above), most of Squarespace's
+direct competitors now ship their own built-in AI for generating and
+writing the site — worth distinguishing since it's not unique to
+Squarespace:
+
+- **Wix** — closest match to Squarespace's breadth: a conversational
+  intake generates a starting site, plus ongoing AI tools for text
+  generation, image editing, a "marketing agent," and layout
+  optimization.
+- **Squarespace itself**, for reference — Blueprint AI generates a
+  tailored starting layout/palette/fonts/copy from an intake
+  questionnaire (narrows template choice rather than freeform-generating
+  a site), plus Beacon AI as an always-on assistant for SEO scans,
+  product descriptions, and marketing copy.
+- **GoDaddy** — Airo, its AI layer for generating site content and
+  marketing copy.
+- **Durable** — aggressive "prompt to full site" generation (site, copy,
+  and basic branding from a business description in about a minute), at
+  the cost of thin ecommerce, SEO, and integrations once past that step.
+- **Framer** — AI-forward on generation (text-prompt-to-site) with
+  cleaner output and better performance, but no built-in ecommerce, email
+  marketing, or scheduling.
+- **Webflow** — the outlier: positioned around pixel-level manual control
+  and exportable code for designers rather than AI-first generation. Some
+  AI content tooling exists, but it's not the platform's main pitch the
+  way it is for Wix, Durable, or Framer.
+
+Net: Wix is the nearest AI-feature-for-feature match to Squarespace among
+the options already in the table above; this doesn't change the
+tradeoffs already listed, it's just additional texture on what "modern
+website builder" means across the category in 2026.
+
 ## Options on the table
 
 **WordPress, kept as-is or re-themed**
