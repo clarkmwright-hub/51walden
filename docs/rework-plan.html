@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>51 Walden Rework Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light dark;
+    --ink:#1E2A22;
+    --bg:#F1F3E9;
+    --surface:#FBFCF6;
+    --surface-2:#E7EAD9;
+    --text:#1E2A22;
+    --text-soft:#4C5A4E;
+    --text-faint:#7C8A78;
+    --brass:#A0733A;
+    --pine:#3F5D45;
+    --clay:#8B4A38;
+    --mist:#C9CFC0;
+    --border: rgba(30,42,34,0.14);
+    --border-strong: rgba(30,42,34,0.28);
+    --shadow: 0 1px 2px rgba(30,42,34,0.06), 0 8px 24px rgba(30,42,34,0.06);
+    --radius: 10px;
+    --good:#3F5D45;
+    --bad:#8B4A38;
+    --mid:#A0733A;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#E9ECDF;
+      --bg:#141C17;
+      --surface:#1A241D;
+      --surface-2:#223026;
+      --text:#E9ECDF;
+      --text-soft:#AEBBAA;
+      --text-faint:#7F8C7B;
+      --brass:#CB9A57;
+      --pine:#7BA383;
+      --clay:#C07C63;
+      --mist:#3A473C;
+      --border: rgba(233,236,223,0.14);
+      --border-strong: rgba(233,236,223,0.28);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+      --good:#7BA383;
+      --bad:#C07C63;
+      --mid:#CB9A57;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#E9ECDF;
+    --bg:#141C17;
+    --surface:#1A241D;
+    --surface-2:#223026;
+    --text:#E9ECDF;
+    --text-soft:#AEBBAA;
+    --text-faint:#7F8C7B;
+    --brass:#CB9A57;
+    --pine:#7BA383;
+    --clay:#C07C63;
+    --mist:#3A473C;
+    --border: rgba(233,236,223,0.14);
+    --border-strong: rgba(233,236,223,0.28);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    --good:#7BA383;
+    --bad:#C07C63;
+    --mid:#CB9A57;
+  }
+
+  *{box-sizing:border-box;}
+  html{background:var(--bg);}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Libre Franklin", ui-sans-serif, system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    padding:0 20px;
+  }
+  h1,h2,h3{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    color:var(--text);
+    text-wrap:balance;
+    margin:0;
+  }
+  a{color:var(--pine);}
+  .wrap{max-width:800px;margin:0 auto;}
+  .wrap-wide{max-width:920px;margin:0 auto;}
+
+  /* ---- top bar ---- */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+    padding:14px 20px;
+  }
+  .topbar-inner{
+    max-width:920px;margin:0 auto;
+    display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .topbar-mark{
+    font-family:"Fraunces", serif; font-weight:600; font-size:1.02rem; letter-spacing:0.01em;
+    white-space:nowrap;
+  }
+  .topbar-mark span{color:var(--brass);}
+  .topnav{display:flex; gap:18px; flex-wrap:wrap; font-size:0.86rem;}
+  .topnav a{color:var(--text-soft); text-decoration:none; border-bottom:1px solid transparent;}
+  .topnav a:hover{color:var(--brass); border-bottom-color:var(--brass);}
+
+  /* ---- cover ---- */
+  .cover{padding:64px 0 40px;}
+  .eyebrow{
+    display:inline-block;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:0.72rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--brass);
+    margin-bottom:18px;
+  }
+  .cover h1{font-size:clamp(2.1rem, 5vw, 3.1rem); line-height:1.08; max-width:14ch;}
+  .cover .dek{
+    margin-top:18px; max-width:58ch; font-size:1.14rem; color:var(--text-soft); line-height:1.55;
+  }
+  .cover-meta{
+    margin-top:34px; display:flex; flex-wrap:wrap; gap:28px 40px;
+    padding-top:22px; border-top:1px solid var(--border);
+  }
+  .meta-item .k{
+    font-family:"IBM Plex Mono",monospace; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--text-faint); display:block; margin-bottom:4px;
+  }
+  .meta-item .v{font-size:0.95rem; color:var(--text); font-weight:500;}
+
+  /* ---- sections ---- */
+  section{padding:52px 0;}
+  section + section{border-top:1px solid var(--border);}
+  .section-head{margin-bottom:28px; max-width:62ch;}
+  .section-head .eyebrow{margin-bottom:10px;}
+  .section-head h2{font-size:clamp(1.5rem,3vw,1.9rem);}
+  .section-head p{color:var(--text-soft); margin-top:12px; font-size:1.02rem;}
+  h3{font-size:1.05rem; margin-bottom:10px;}
+  p{margin:0 0 14px;}
+  ul, ol{margin:0 0 14px; padding-left:1.25em;}
+  li{margin-bottom:8px;}
+  li::marker{color:var(--brass);}
+
+  .lede{font-size:1.06rem; color:var(--text-soft); max-width:64ch;}
+
+  /* ---- finding cards ---- */
+  .findings{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px;}
+  @media (max-width:640px){ .findings{grid-template-columns:1fr;} }
+  .finding{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 20px;
+  }
+  .finding .tag{
+    font-family:"IBM Plex Mono",monospace; font-size:0.66rem; letter-spacing:0.09em; text-transform:uppercase;
+    color:var(--clay); display:block; margin-bottom:8px;
+  }
+  .finding p{margin:0; font-size:0.94rem; color:var(--text-soft);}
+  .finding strong{color:var(--text); font-weight:600;}
+
+  /* ---- flow wireframes ---- */
+  .flows{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:24px;}
+  @media (max-width:680px){ .flows{grid-template-columns:1fr;} }
+  .flow{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);}
+  .flow-label{
+    font-family:"IBM Plex Mono",monospace; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase;
+    margin-bottom:12px; display:flex; align-items:center; gap:8px;
+  }
+  .flow-label.now{color:var(--clay);}
+  .flow-label.next{color:var(--pine);}
+  .dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;}
+  .fblock{
+    border:1px dashed var(--border-strong); border-radius:6px;
+    padding:9px 12px; font-size:0.82rem; color:var(--text-soft);
+    margin-bottom:8px; display:flex; justify-content:space-between; gap:8px; align-items:center;
+  }
+  .fblock b{color:var(--text); font-weight:600;}
+  .fblock small{color:var(--text-faint); font-family:"IBM Plex Mono",monospace; font-size:0.68rem;}
+  .fblock.hero{background:var(--surface-2); border-style:solid;}
+  .fblock.cta{border-color:var(--pine); color:var(--pine);}
+  .fblock.cta b{color:var(--pine);}
+  .fblock.buried{opacity:0.6;}
+
+  /* ---- checklist table ---- */
+  .tablewrap{overflow-x:auto; margin-top:8px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface);}
+  table{width:100%; border-collapse:collapse; font-size:0.92rem; min-width:560px;}
+  thead th{
+    text-align:left; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text-faint); font-weight:600; padding:12px 16px; border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  tbody td{padding:12px 16px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-soft);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody td:first-child{color:var(--text); font-weight:500;}
+  .yes{color:var(--good); font-weight:600;}
+  .no{color:var(--bad); font-weight:600;}
+  .mid{color:var(--mid); font-weight:600;}
+  .pick-row{background:color-mix(in srgb, var(--pine) 7%, transparent);}
+  .pick-badge{
+    display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:0.62rem; letter-spacing:0.08em;
+    text-transform:uppercase; background:var(--pine); color:var(--surface); padding:2px 7px; border-radius:4px; margin-left:8px;
+    vertical-align:middle;
+  }
+
+  /* ---- sitemap ---- */
+  .sitemap-root{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; color:var(--text-faint);
+    text-align:center; margin-bottom:6px; letter-spacing:0.03em;
+  }
+  .sitemap{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;
+    margin-top:14px; padding-top:18px; border-top:1px solid var(--border-strong); position:relative;
+  }
+  .pillar{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow);}
+  .pillar.new{border-color:color-mix(in srgb, var(--pine) 45%, var(--border));}
+  .pillar h4{
+    font-family:"Fraunces",serif; font-weight:600; font-size:0.98rem; margin:0 0 4px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .pillar .note{font-size:0.72rem; color:var(--brass); font-family:"IBM Plex Mono",monospace; letter-spacing:0.03em; margin-bottom:10px; display:block;}
+  .pillar ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px;}
+  .pillar li{margin:0; font-size:0.83rem; color:var(--text-soft); border-top:1px solid var(--border); padding-top:6px;}
+  .pillar li:first-child{border-top:none; padding-top:0;}
+  .sitemap-foot{
+    margin-top:16px; font-size:0.82rem; color:var(--text-faint); display:flex; gap:22px; flex-wrap:wrap;
+    font-family:"IBM Plex Mono",monospace;
+  }
+  .sitemap-foot b{color:var(--brass); font-family:"Libre Franklin",sans-serif; font-weight:600;}
+
+  /* ---- roadmap ---- */
+  .acts{margin-top:10px;}
+  .act{
+    display:grid; grid-template-columns:100px 1fr; gap:22px;
+    padding:22px 0; border-top:1px solid var(--border);
+  }
+  .act:first-child{border-top:none;}
+  @media (max-width:600px){ .act{grid-template-columns:1fr; gap:8px;} }
+  .act-num{
+    font-family:"Fraunces",serif; font-weight:600; font-size:1.6rem; color:var(--brass); line-height:1;
+  }
+  .act-num small{
+    display:block; font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:0.62rem;
+    letter-spacing:0.08em; color:var(--text-faint); margin-top:6px; text-transform:uppercase;
+  }
+  .act-body h3{margin-bottom:2px;}
+  .act-when{
+    font-family:"IBM Plex Mono",monospace; font-size:0.72rem; color:var(--text-faint); margin-bottom:10px; display:block;
+  }
+  .act-body ul{margin-bottom:0;}
+  .act-body li{font-size:0.94rem; color:var(--text-soft);}
+
+  /* ---- budget ---- */
+  .budget-grid{display:grid; grid-template-columns:1fr; gap:10px; margin-top:10px;}
+  .brow{
+    display:grid; grid-template-columns:1.4fr 1fr 1.6fr; gap:16px; align-items:baseline;
+    padding:14px 18px; background:var(--surface); border:1px solid var(--border); border-radius:8px;
+  }
+  @media (max-width:640px){ .brow{grid-template-columns:1fr; gap:4px;} }
+  .brow .item{font-weight:600; font-family:"Fraunces",serif; font-size:0.98rem;}
+  .brow .amount{
+    font-family:"IBM Plex Mono",monospace; font-size:0.92rem; color:var(--pine); font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+  .brow .note{font-size:0.86rem; color:var(--text-soft);}
+
+  /* ---- risks ---- */
+  .risks{display:grid; gap:12px; margin-top:10px;}
+  .risk{
+    display:grid; grid-template-columns:1fr 1fr; gap:18px;
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px;
+  }
+  @media (max-width:640px){ .risk{grid-template-columns:1fr;} }
+  .risk .lbl{font-family:"IBM Plex Mono",monospace; font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase; display:block; margin-bottom:6px;}
+  .risk .r .lbl{color:var(--clay);}
+  .risk .m .lbl{color:var(--pine);}
+  .risk p{margin:0; font-size:0.92rem; color:var(--text-soft);}
+
+  footer{padding:40px 0 64px; border-top:1px solid var(--border);}
+  footer p{font-size:0.85rem; color:var(--text-faint); max-width:60ch;}
+
+  @media (prefers-reduced-motion: no-preference){
+    section{scroll-margin-top:70px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-mark">51 Walden <span>&mdash; rework plan</span></div>
+    <nav class="topnav">
+      <a href="#audit">Audit</a>
+      <a href="#standards">Standards</a>
+      <a href="#platform">Platform</a>
+      <a href="#sitemap">Sitemap</a>
+      <a href="#homepage">Homepage</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#budget">Budget</a>
+      <a href="#risks">Risks</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="cover">
+    <span class="eyebrow">Website rework &middot; proposal for discussion</span>
+    <h1>51 Walden, off WordPress and pointed at 2026</h1>
+    <p class="dek">A plan for rebuilding 51walden.org on a platform its volunteers can run without a developer on call &mdash; and for giving the site the same care the board has spent on the building: the Access 51 accessibility campaign, the new HVAC, four resident companies putting on 60&plus; performances a year for about 8,000 patrons. None of that is on the homepage today.</p>
+    <div class="cover-meta">
+      <div class="meta-item"><span class="k">Current platform</span><span class="v">WordPress (Divi-style builder)</span></div>
+      <div class="meta-item"><span class="k">Proposed platform</span><span class="v">Squarespace</span></div>
+      <div class="meta-item"><span class="k">Scope</span><span class="v">Full IA, design, and content rebuild</span></div>
+      <div class="meta-item"><span class="k">Est. timeline</span><span class="v">10&ndash;14 weeks, part-time</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="audit">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">01 &middot; where the site stands today</span>
+      <h2>The building is in better shape than the front door</h2>
+      <p class="lede">A walk through the live site turns up a WordPress build that's technically fine &mdash; it's responsive, it loads, the menus work &mdash; but the architecture buries the things a 2026 nonprofit visitor and a 2026 nonprofit board both expect to find fast.</p>
+    </div>
+    <div class="findings">
+      <div class="finding"><span class="tag">Giving</span><p><strong>"Donate" is labeled "Contribute"</strong> and sits three levels deep, inside the Contact menu. There's no giving button anywhere in the persistent header.</p></div>
+      <div class="finding"><span class="tag">Trust signals</span><p><strong>The Access 51 campaign</strong> raised $500k for ADA restrooms, a stage lift, and accessible restrooms &mdash; real, verifiable nonprofit credibility &mdash; but it's one paragraph on a "Facility" subpage no one lands on.</p></div>
+      <div class="finding"><span class="tag">Impact</span><p><strong>60+ performances and ~8,000 patrons a year</strong> is a strong number that exists only inside the PDF annual-appeal letter, not on the page a first-time visitor sees.</p></div>
+      <div class="finding"><span class="tag">Venue rental</span><p><strong>No path to inquire about renting the hall or dance studio.</strong> The Facility page describes a 350-seat space with two stages and stops there &mdash; no pricing, no availability, no form.</p></div>
+      <div class="finding"><span class="tag">Resident groups</span><p>Concord Band, Concord Players, Concord Orchestra, and Opera51 each get a short paragraph and a "Learn More" link off-site &mdash; the four organizations that <em>are</em> the venue's programming read as an afterthought.</p></div>
+      <div class="finding"><span class="tag">Content sprawl</span><p>Events split across separate "Event Calendar" and "Past Events" pages, a standalone "Code of Conduct," a linked PDF for HVAC/air-quality details &mdash; reasonable content, scattered without a spine.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="standards">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">02 &middot; translating the brief</span>
+      <h2>What "modern nonprofit expectations" means, concretely</h2>
+      <p class="lede">Two current homepage flows, side by side &mdash; what a visitor scrolls through today, and what the same scroll should do instead.</p>
+    </div>
+    <div class="flows">
+      <div class="flow">
+        <div class="flow-label now"><span class="dot"></span>Current homepage, top to bottom</div>
+        <div class="fblock hero"><b>Hero photo</b><small>caption only</small></div>
+        <div class="fblock"><b>"We are host to&hellip;"</b><small>4 orange pills</small></div>
+        <div class="fblock"><b>Up Next</b><small>one event block</small></div>
+        <div class="fblock"><b>Air quality update</b><small>news item</small></div>
+        <div class="fblock"><b>4 resident-group blurbs</b><small>stacked</small></div>
+        <div class="fblock"><b>Art gallery note</b><small>"stay tuned"</small></div>
+        <div class="fblock buried"><b>Give / rent / volunteer</b><small>not present</small></div>
+      </div>
+      <div class="flow">
+        <div class="flow-label next"><span class="dot"></span>Proposed homepage, top to bottom</div>
+        <div class="fblock hero"><b>Hero: real performance photo/video</b><small>one line, one CTA</small></div>
+        <div class="fblock cta"><b>Impact strip</b><small>60+ shows &middot; ~8,000 patrons &middot; est. 1887</small></div>
+        <div class="fblock"><b>Up Next</b><small>pulled live from calendar</small></div>
+        <div class="fblock"><b>Four resident groups</b><small>equal-weight cards</small></div>
+        <div class="fblock cta"><b>Give / Rent the Hall / Volunteer</b><small>three-across CTA row</small></div>
+        <div class="fblock"><b>Access 51 &amp; the building story</b><small>trust-building teaser</small></div>
+        <div class="fblock"><b>Newsletter signup</b><small>footer capture</small></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:34px;">Feature checklist</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Expectation</th><th>Today</th><th>Rebuild</th></tr></thead>
+        <tbody>
+          <tr><td>Persistent, one-click donate button</td><td class="no">Absent</td><td>Header, every page, mobile-first</td></tr>
+          <tr><td>Recurring / monthly giving option</td><td class="no">Check by mail or single online gift</td><td>Stripe-backed, recurring toggle</td></tr>
+          <tr><td>Impact numbers above the fold</td><td class="no">Buried in a PDF letter</td><td>Homepage impact strip</td></tr>
+          <tr><td>Facility rental inquiry path</td><td class="no">None</td><td>Dedicated page + form, capacity &amp; photos</td></tr>
+          <tr><td>Financial transparency (990 / annual report)</td><td class="no">Not linked</td><td>Linked from Support page</td></tr>
+          <tr><td>Donor recognition / giving levels</td><td class="mid">Levels listed in the appeal letter only</td><td>Public donor-levels page</td></tr>
+          <tr><td>Unified, filterable events calendar</td><td class="mid">Split "Calendar" / "Past Events" pages</td><td>Single calendar, filter by resident group</td></tr>
+          <tr><td>Email list capture</td><td class="mid">"Join Our Email List" nav item only</td><td>Footer + post-event capture</td></tr>
+          <tr><td>Accessibility of the site itself (WCAG 2.1 AA)</td><td class="mid">Unaudited</td><td>Contrast, alt text, focus states checked pre-launch</td></tr>
+          <tr><td>Mobile layout</td><td class="yes">Already workable</td><td>Carried forward, refined</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="platform">
+  <div class="wrap-wide">
+    <div class="section-head">
+      <span class="eyebrow">03 &middot; platform</span>
+      <h2>Move off WordPress &mdash; onto Squarespace</h2>
+      <p class="lede">The explicit ask was an easier platform, run by volunteers, with no dedicated developer on staff. That rules out anything that still needs plugin updates, security patching, or a build step.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Platform</th><th>Volunteer upkeep</th><th>Built-in giving &amp; events</th><th>Design control</th><th>Rough cost</th></tr></thead>
+        <tbody>
+          <tr><td>WordPress <span style="color:var(--text-faint); font-weight:400;">(current)</span></td><td class="no">Plugin &amp; core updates, security patching, a builder plugin (Divi-class) to maintain</td><td class="mid">Via added plugins (more surface area)</td><td class="yes">Highest, at a cost</td><td>Hosting + plugin licenses, ~$200&ndash;500/yr</td></tr>
+          <tr class="pick-row"><td>Squarespace <span class="pick-badge">Recommended</span></td><td class="yes">Zero patching; one login; a non-technical volunteer can edit text and photos safely</td><td class="yes">Native Stripe donations, native events/calendar, native forms</td><td class="mid">Good within templates; less freeform than Webflow</td><td>~$25&ndash;49/mo, annual billing</td></tr>
+          <tr><td>Webflow</td><td class="mid">No patching, but the visual builder has a real learning curve for non-designers</td><td class="mid">Forms &amp; CMS native; giving needs a Stripe/Donorbox embed</td><td class="yes">Highest of the no-code options</td><td>~$23&ndash;40/mo, plus more setup time</td></tr>
+          <tr><td>Wix</td><td class="yes">Similarly low-maintenance</td><td class="mid">Donations via app; weaker content modeling for four repeating "resident group" pages</td><td class="mid">Good, less clean CMS structure</td><td>~$27&ndash;49/mo</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:18px; font-size:0.94rem; color:var(--text-soft); max-width:66ch;">Squarespace wins on the criterion that matters most for an all-volunteer board: nobody has to think about hosting, updates, or plugin conflicts again. If a design-capable volunteer or a hired freelancer stays involved long-term, Webflow is the fallback &mdash; more visual range, at the cost of a steeper handoff.</p>
+  </div>
+</section>
+
+<section id="sitemap">
+  <div class="wrap-wide">
+    <div class="section-head">
+      <span class="eyebrow">04 &middot; information architecture</span>
+      <h2>A sitemap with a front door for giving</h2>
+      <p class="lede">Six pillars instead of three flat menus. "Support" and "Rent the Space" become first-class items, not sub-items of Contact.</p>
+    </div>
+    <div class="sitemap-root">51walden.org &nbsp;+&nbsp; persistent header <b style="color:var(--brass); font-family:inherit;">Donate</b> button</div>
+    <div class="sitemap">
+      <div class="pillar new">
+        <h4>Home</h4>
+        <span class="note">rebuilt</span>
+        <ul><li>Impact strip</li><li>Up Next (live)</li><li>Resident groups</li></ul>
+      </div>
+      <div class="pillar">
+        <h4>About</h4>
+        <ul><li>Our Story &amp; History</li><li>Board &amp; Governance</li><li>Access 51 &amp; the Building</li><li>Code of Conduct</li></ul>
+      </div>
+      <div class="pillar new">
+        <h4>Resident Groups</h4>
+        <span class="note">shared template</span>
+        <ul><li>Concord Band</li><li>Concord Players</li><li>Concord Orchestra</li><li>Opera51</li></ul>
+      </div>
+      <div class="pillar">
+        <h4>Events</h4>
+        <ul><li>Calendar (filterable)</li><li>Past Events archive</li></ul>
+      </div>
+      <div class="pillar new">
+        <h4>Support</h4>
+        <span class="note">was buried in Contact</span>
+        <ul><li>Give (one-time / recurring)</li><li>Volunteer</li><li>Financial transparency</li></ul>
+      </div>
+      <div class="pillar new">
+        <h4>Rent the Space</h4>
+        <span class="note">new</span>
+        <ul><li>Main hall (350 seats)</li><li>Dance studio</li><li>Inquiry form</li></ul>
+      </div>
+    </div>
+    <div class="sitemap-foot">
+      <span><b>Visit</b> &mdash; folded into About: directions, parking, accessibility</span>
+      <span><b>Footer, every page</b> &mdash; email signup, 501(c)(3) EIN, socials</span>
+    </div>
+  </div>
+</section>
+
+<section id="homepage">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">05 &middot; design direction</span>
+      <h2>Look and feel</h2>
+      <p class="lede">51 Walden's own materials already lean into it: comedy-and-tragedy masks in the current mark, a National Register building from 1887, four resident companies with their own decades of history. The redesign should read like a well-kept playbill for a historic house &mdash; not a generic template with an orange call-to-action button.</p>
+    </div>
+    <ul>
+      <li><strong>Photography-led, not stock-led.</strong> Real photos from the four resident groups' actual productions and rehearsals in the hall &mdash; a single coordinated half-day shoot covers the gap cheaply.</li>
+      <li><strong>A quieter palette than the current blue-and-orange builder default:</strong> ink and pine greens (a nod to Walden's own woods and pond) with an aged-brass accent for calls to action, rather than a generic bright-orange button.</li>
+      <li><strong>One consistent template for all four resident groups</strong> &mdash; same layout, same fields (season, rehearsal night, ticket link, short history) &mdash; so none of the four reads as more or less cared-for than the others.</li>
+      <li><strong>The accessibility story told as a page, not a footnote</strong> &mdash; it's genuine capital-campaign work worth the same visual treatment as the "Up Next" event.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">06 &middot; roadmap</span>
+      <h2>Five acts, about a season's worth of evenings and weekends</h2>
+      <p class="lede">Sequenced so a volunteer committee can run it around existing rehearsal and performance schedules &mdash; and so cutover lands in a dark week between seasons, not mid-run.</p>
+    </div>
+    <div class="acts">
+      <div class="act">
+        <div class="act-num">I<small>Discovery</small></div>
+        <div class="act-body">
+          <span class="act-when">Weeks 1&ndash;3</span>
+          <h3>Audit &amp; content pull</h3>
+          <ul>
+            <li>Inventory every current page, PDF, and form (including the Airborne-Virus-Mitigation notice and Code of Conduct)</li>
+            <li>Export the existing email list before touching any WordPress plugin it depends on</li>
+            <li>Collect updated copy, rosters, and season info from each of the four resident groups</li>
+            <li>Pull real numbers already in hand: annual attendance, patron count, founding/residency dates</li>
+          </ul>
+        </div>
+      </div>
+      <div class="act">
+        <div class="act-num">II<small>Design</small></div>
+        <div class="act-body">
+          <span class="act-when">Weeks 3&ndash;6</span>
+          <h3>Sitemap, wireframes, visual direction</h3>
+          <ul>
+            <li>Sign off the six-pillar sitemap with the board</li>
+            <li>Low-fidelity wireframes: homepage, resident-group template, rental page</li>
+            <li>Palette, type, and photography direction; one board review pass</li>
+          </ul>
+        </div>
+      </div>
+      <div class="act">
+        <div class="act-num">III<small>Build</small></div>
+        <div class="act-body">
+          <span class="act-when">Weeks 6&ndash;10</span>
+          <h3>Build in Squarespace</h3>
+          <ul>
+            <li>Build all pages against the approved wireframes</li>
+            <li>Connect Stripe for one-time and recurring donations</li>
+            <li>Set up the events calendar and the rental inquiry form</li>
+            <li>Wire the footer email signup to a newsletter tool</li>
+            <li>Map every current WordPress URL to its new address for redirects</li>
+          </ul>
+        </div>
+      </div>
+      <div class="act">
+        <div class="act-num">IV<small>Launch</small></div>
+        <div class="act-body">
+          <span class="act-when">Weeks 10&ndash;12</span>
+          <h3>QA, accessibility pass, cutover</h3>
+          <ul>
+            <li>Cross-device QA and a contrast/alt-text/focus-state pass</li>
+            <li>301 redirects live before DNS points at the new site</li>
+            <li>Schedule the DNS cutover for a dark week between seasons</li>
+            <li>Resubmit the sitemap to Search Console; watch for 404s in week one</li>
+          </ul>
+        </div>
+      </div>
+      <div class="act">
+        <div class="act-num">V<small>Handoff</small></div>
+        <div class="act-body">
+          <span class="act-when">Ongoing</span>
+          <h3>Keep it maintainable</h3>
+          <ul>
+            <li>A one-page editing guide, kept in the org's shared drive &mdash; not one person's inbox</li>
+            <li>A named site admin, reviewed each annual meeting alongside the board</li>
+            <li>A quarterly freshness check: current season, board roster, financial-transparency link</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="budget">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">07 &middot; budget shape</span>
+      <h2>Rough ranges, not a quote</h2>
+      <p class="lede">Actual figures depend on how much is done by volunteers versus hired out. Shown as ranges so the board can scope to what's available this cycle.</p>
+    </div>
+    <div class="budget-grid">
+      <div class="brow"><div class="item">Squarespace subscription</div><div class="amount">$25&ndash;49/mo</div><div class="note">Business or Commerce tier, billed annually; includes hosting, SSL, forms</div></div>
+      <div class="brow"><div class="item">Donation processing</div><div class="amount">~2.9% + 30&cent;/gift</div><div class="note">Stripe card-processing fee only &mdash; no separate platform fee on top</div></div>
+      <div class="brow"><div class="item">Photography</div><div class="amount">$0&ndash;1,500</div><div class="note">One coordinated half-day shoot across the hall and four resident groups, or volunteer-sourced</div></div>
+      <div class="brow"><div class="item">Design &amp; build</div><div class="amount">$0&ndash;8,000</div><div class="note">DIY by a design-comfortable volunteer at the low end; a freelancer for a site this size at the high end</div></div>
+      <div class="brow"><div class="item">Domain</div><div class="amount">~$20/yr</div><div class="note">Keep 51walden.org, just repoint DNS &mdash; no new domain needed</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="risks">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">08 &middot; risks</span>
+      <h2>What could go wrong, and the cheap fix for each</h2>
+    </div>
+    <div class="risks">
+      <div class="risk"><div class="r"><span class="lbl">Risk</span><p>Search ranking drops after the move</p></div><div class="m"><span class="lbl">Mitigation</span><p>Full 301 redirect map built in Act I, live before DNS cutover</p></div></div>
+      <div class="risk"><div class="r"><span class="lbl">Risk</span><p>The current email list is locked inside a WordPress plugin</p></div><div class="m"><span class="lbl">Mitigation</span><p>Export it in week one, before any plugin is touched</p></div></div>
+      <div class="risk"><div class="r"><span class="lbl">Risk</span><p>Cutover lands mid-run for one of the four resident groups</p></div><div class="m"><span class="lbl">Mitigation</span><p>Schedule DNS cutover for a dark week between seasons</p></div></div>
+      <div class="risk"><div class="r"><span class="lbl">Risk</span><p>The volunteer who knows the site moves on</p></div><div class="m"><span class="lbl">Mitigation</span><p>One-page editing guide lives in the shared drive, reviewed at the annual meeting</p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Working proposal prepared for internal discussion by 51 Walden's board and resident groups &mdash; not an official 51 Walden publication. Figures on attendance, giving levels, and building improvements are drawn from content already public on 51walden.org.</p>
+  </div>
+</footer>
+
+</body>
+</html>
